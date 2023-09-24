@@ -13,12 +13,15 @@
 
 void Sort_from_start( struct About_text* ab_text, struct About_str* ab_str)
 {
+    assert(ab_text == NULL);
+    assert(ab_str == NULL);
+
     for ( int j = 1; j < (ab_text -> rows); j++ )
     {
         //printf("now row: %d", j);
         for ( int i = 1; i < (ab_text -> rows); i++ )
         {
-            if (cmp_str(ab_str[i - 1].str, ab_str[i].str))
+            if (cmp_str(ab_str[i - 1].str, ab_str[i].str, i, i - 1, ab_str))
             {
                 struct About_str tmp = ab_str[i];
                 ab_str[i] = ab_str[i-1];
@@ -29,7 +32,7 @@ void Sort_from_start( struct About_text* ab_text, struct About_str* ab_str)
 }
 
 
-int cmp_str ( char* first_str, char* second_str )
+int cmp_str ( char* first_str, char* second_str , int first_id, int second_id, struct About_str* ab_str)
 {
     //printf ("cmp_str:\nfirst_str  = <%s>, \nsecond_str = <%s>\n", first_str, second_str);
 
@@ -42,15 +45,15 @@ int cmp_str ( char* first_str, char* second_str )
     {
         char first_elem  = (char) tolower ( *( first_str   + i) );
         char second_elem = (char) tolower ( *( second_str  + j) );
-        printf("first_elem = %c\nfirst_str = %s\n", first_elem, first_str);
-        printf("second_elem = %c\nsecond_str = %s\n\n",second_elem, second_str);
+        //printf("first_elem = %c\nfirst_str = %s\n", first_elem, first_str);
+        //printf("second_elem = %c\nsecond_str = %s\n\n",second_elem, second_str);
         //getchar();
 
         //printf("\nstart turn: <%c vs %c> \n \n", first_elem, second_elem);
-        //Clean_buf();
         //getchar();
-
-        if (i == strlen(first_str) and j == strlen(second_str))
+        //printf("1)len_1 = %d, len_2 = %d\n",strlen(first_str), strlen(second_str));
+        //printf("2)len_1 = %d, len_2 = %d\n",ab_str[first_id].len, ab_str[second_id].len);
+        if (i == strlen(first_str) && j == strlen(second_str))
         {
             return -1;
         }
@@ -77,15 +80,15 @@ int cmp_str ( char* first_str, char* second_str )
             continue;
         }
 
-        if (cmp_char(*( first_str + i ), *( second_str + j ) ) > 0)
+        if (cmp_char(first_elem, second_elem) > 0)
         {
-            printf ("if4: %c vs %c:  > 0\n\n", first_elem, second_elem);
+            //printf ("if4: %c vs %c:  > 0\n\n", first_elem, second_elem);
             return 1;
         }
 
-        if (cmp_char(*( first_str + i ), *( second_str + j ) ) < 0)
+        if (cmp_char(first_elem, second_elem) < 0)
         {
-            printf ("if5: %c vs %c < 0\n\n", first_elem, second_elem);
+            //printf ("if5: %c vs %c < 0\n\n", first_elem, second_elem);
             return 0;
         }
 

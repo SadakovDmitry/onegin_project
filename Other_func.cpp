@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <assert.h>
@@ -28,11 +29,14 @@ int Is_letter(char new_elem)
 //--------------------------------------------------------------------------
 
 void Print_h(struct About_text* ab_text, struct About_str* ab_str){
+    assert(ab_text != NULL);
+    assert(ab_str != NULL);
+
     //printf("rows = %d\n", ab_text->rows);
     for(int i = 0; i < (ab_text->rows); i++){
-        printf("%s\n", ab_str[i].str );
+        printf("%s", ab_str[i].str );
     }
-    printf("\n\n");
+    printf("\n\n\n");
 }
 
 //--------------------------------------------------------------------------
@@ -44,10 +48,13 @@ int cmp_char(int first_elem , int second_elem)
 
 //--------------------------------------------------------------------------
 
-void fill_struct( struct About_text* ab_text, int* Num_rows, int size_of_text)
+void fill_struct( struct About_text* ab_text, int* Num_rows, int size_of_text, char* buffer)
 {
-    ab_text -> rows = *Num_rows + 1;
+    assert(ab_text != NULL);
+
+    ab_text -> rows = *Num_rows;
     ab_text -> text_size = size_of_text;
+    ab_text -> id_buf = buffer;
 
     printf(" Num_rows =  %d \n", ab_text -> rows);
 }
@@ -56,28 +63,42 @@ void fill_struct( struct About_text* ab_text, int* Num_rows, int size_of_text)
 
 void Make_file(struct About_text* ab_text, struct About_str* ab_str)
 {
+    assert(ab_text != NULL);
+    assert(ab_str != NULL);
+
     FILE* output_file = fopen("Onegin_output.txt", "a");
     for (int i = 0; i < (ab_text ->rows); i++)
     {
         fputs((ab_str[i].str), output_file);
     }
-    fputc('\n', output_file);
+    fputs("\n\n\n\n", output_file);
+    fclose(output_file);
 }
 
 //--------------------------------------------------------------------------
 
-void Print_buf(char* buffer, struct About_text ab_text )
+void Print_buf( struct About_text ab_text )
 {
+    assert(ab_text.id_buf != NULL);
+    assert(&ab_text != NULL);
+
     FILE* output_file = fopen("Onegin_output.txt", "a");
     for (int i = 0; i < ab_text.text_size; i++ )
     {
-        if (*(buffer + i) == '\0')
+        if (*(ab_text.id_buf + i) == '\0')
         {
             fputc('\n', output_file);
         }
         else
         {
-            fputc(*(buffer + i), output_file);
+            fputc(*(ab_text.id_buf + i), output_file);
         }
     }
+    fclose(output_file);
+}
+
+void Free_buf(struct About_text* ab_text, struct About_str* ab_str)
+{
+    free(ab_str);
+    free(ab_text -> id_buf);
 }

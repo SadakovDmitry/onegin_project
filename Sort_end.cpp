@@ -19,14 +19,19 @@ int cmp_str_from_end ( char* first_str, char* second_str , int num_of_row , stru
 
     int i = ab_str[num_of_row - 1].len; //krivo
     int j = ab_str[num_of_row].len;
-    while ( true )
+    while (true)
     {
-        char first_elem  = (char) tolower ( *( first_str   + i) );
-        char second_elem = (char) tolower ( *( second_str  + j) );
+        char first_elem  = (char) tolower ( *( first_str  + i) );
+        char second_elem = (char) tolower ( *( second_str + j) );
 
         //printf("\nstart turn: <%c vs %c> \n \n", first_elem, second_elem);
         //Clean_buf();
         //getchar();
+        if (i == 0 || j == 0)
+        {
+            return 0;
+
+        }
 
         if (! Is_letter ( first_elem ) && ! Is_letter ( second_elem ))
         {
@@ -50,13 +55,13 @@ int cmp_str_from_end ( char* first_str, char* second_str , int num_of_row , stru
             continue;
         }
 
-        if (cmp_char(*( first_str + i ), *( second_str + j ) ) > 0)
+        if (cmp_char(first_elem, second_elem ) > 0)
         {
             //printf ("if4: %c vs %c: sitching to strcmp (%s, %s) > 0\n", first_elem, second_elem, first_str + i, second_str + j);
             return 1;
         }
 
-        if (cmp_char(*( first_str + i ), *( second_str + j ) ) < 0)
+        if (cmp_char(first_elem, second_elem ) < 0)
         {
             //printf ("if5: %c vs %c: sitching to strcmp (%s, %s) < 0\n", first_elem, second_elem, first_str + i, second_str + j);
             return 0;
@@ -71,6 +76,9 @@ int cmp_str_from_end ( char* first_str, char* second_str , int num_of_row , stru
 
 void Sort_from_end( struct About_text* ab_text, struct About_str* ab_str)
 {
+    assert(ab_text != NULL);
+    assert(ab_str != NULL);
+
     for ( int j = 1; j < (ab_text -> rows); j++ )
     {
         //printf("now row: %d", j);

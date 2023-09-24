@@ -1,7 +1,7 @@
 struct About_text{
     int rows;
     int text_size;
-    char** id_text;
+    char* id_buf;
 };
 
 struct About_str{

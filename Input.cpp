@@ -10,7 +10,7 @@
 #include "Input.h"
 #include "Qsort_Onegin.h"
 
-#define MAX_NUM 1000
+const int MAX_NUM = 1000;
 
 int Size_of_text(int* Num_rows)
 {
@@ -35,7 +35,10 @@ int Size_of_text(int* Num_rows)
 }
 
 
-struct About_str* Input_text (int Num_rows, char* buffer, int size_of_text) {
+struct About_str* Input_text (int Num_rows, char* buffer) {
+
+    assert(buffer != NULL);
+
     FILE* file = fopen("Evgeniy_Onegin.txt", "r");
 
     assert ( file != nullptr );
@@ -44,7 +47,7 @@ struct About_str* Input_text (int Num_rows, char* buffer, int size_of_text) {
     int i = 0;
     int now_index_buf = 0;
     struct About_str* ab_str = ( struct About_str* ) calloc ( Num_rows + 1 , sizeof ( struct About_str ));
-    //struct About_str ab_str[12] = {};
+
     while ( true )
     {
         char *input = fgets ( ( char* ) (buffer + now_index_buf), MAX_NUM, file );
@@ -74,26 +77,23 @@ struct About_str* Input_text (int Num_rows, char* buffer, int size_of_text) {
     return ab_str;
 }
 
-/*
-int num_rows (int* Num_rows, char* buffer)
+
+struct About_str* Work_with_input_file(struct About_text* ab_text, char* buffer, int* Num_rows)
 {
-    FILE* file = fopen("Evgeniy_Onegin.txt", "r");
+    FILE* output_file = fopen("Onegin_output.txt", "w");
+    fclose(output_file);
 
-    assert ( file != nullptr );
+    int size_of_text = Size_of_text (Num_rows);
+    buffer = (char*) calloc (size_of_text + 1, sizeof(char));
 
-    int i = 0;
-    int now_index_buf = 0;
-    while ( true )
-    {
-        char *input = fgets ( ( char* ) (buffer), MAX_NUM, file );
-        (*Num_rows)++;
-        if ( input == NULL )
-        {
-            break;
-        }
-        now_index_buf = now_index_buf + strlen(input);
-        i++;
-    }
-    return now_index_buf;
+    //fprintf(stderr,"Number of rows = %d", size_of_text);
+
+    struct About_str* ab_str = Input_text (*(Num_rows), buffer);
+
+    fill_struct( ab_text, Num_rows, size_of_text, buffer);
+    //fprintf(stderr,"Number of rows = %d", Num_rows);
+    assert(ab_str != NULL);
+    Clean_buf();
+
+    return ab_str;
 }
-*/

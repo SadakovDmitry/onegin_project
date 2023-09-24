@@ -10,7 +10,7 @@
 #include "Input.h"
 #include "Qsort_Onegin.h"
 
-void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, int* previous_start, int* previous_end, int* mid_id, struct About_str* ab_str)
+void deviser( int* start, int* end, char* mid_elem, int* mid_id, struct About_str* ab_str)
 {
     //Print_ans(massiv, 0, LEN_MASSIV, *start, *end);
     //printf("\n");
@@ -19,7 +19,9 @@ void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, i
     {
         //Print_h(*ab_text);
         //printf("\n 1 :: result of cmp = %d\n, start = %d, end = %d \n", cmp_str((ab_text -> id_text)[*start], mid_elem), *start , *end);
-        while( (cmp_str(ab_str[*start].str, mid_elem) == 0) && (*start < *end ))
+        //printf("start = %d, end = %d, mid_id = %d, ab_str[end] = %s\n", *start, *end, *mid_id, ab_str[*end].str);
+
+        while( (cmp_str(ab_str[*start].str, mid_elem, *start, *mid_elem, ab_str) == 0) && (*start < *end ))
         {
             //printf("\n 1 :: result of cmp = %d\n, start = %d, end = %d \n", cmp_str((ab_text -> id_text)[*start], mid_elem), *start , *end);
 
@@ -27,18 +29,18 @@ void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, i
             /*
             Print_ans(massiv, *previous_start, *previous_end + 1, *start, *end);
             printf("\n 1) mid_id = %d, mid_elem = %d, start = %2d, end = %2d, now_elem = %d", *mid_id, *mid_elem, *start, *end, massiv[*start]);
-            getchar();
             */
+            //getchar();
         }
-
-        while( (cmp_str( mid_elem, ab_str[*end].str) == 0 ) && (*start < *end ))
+        //printf("start = %d, end = %d, mid_id = %d, ab_str[end] = %s\n", *start, *end, *mid_id, ab_str[*end].str);
+        while( (cmp_str( mid_elem, ab_str[*end].str, *mid_elem, *end, ab_str) == 0 ) && (*start < *end ))
         {
             //printf("\n 2 :: result of cmp = %d \n", cmp_str( mid_elem,(ab_text -> id_text)[*end]));
             (*end)--;
-            /*Print_ans(massiv, *previous_start, *previous_end + 1, *start, *end);
-            printf("\n 2) mid_id = %d, mid_elem = %d, end = %2d, start = %2d, now_elem = %d", *mid_id, *mid_elem, *end, *start, massiv[*end]);
-            getchar();
-            */
+            //Print_ans(massiv, *previous_start, *previous_end + 1, *start, *end);
+            //printf("\n 2) mid_id = %d, mid_elem = %d, end = %2d, start = %2d", *mid_id, *mid_elem, *end, *start);
+            //getchar();
+
         }
 
         if ( *start != *end )
@@ -47,7 +49,7 @@ void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, i
             ab_str[*end] = ab_str[*start];
             ab_str[*start] = tmp;
 
-        if ( *mid_id == *start ||  cmp_str(ab_str[*start].str, ab_str[*end].str) == -1 )
+        if ( *mid_id == *start ||  cmp_str(ab_str[*start].str, ab_str[*end].str, *start, *end, ab_str) == -1 )
         {
             (*start)++;
             //printf("\n\n\n\n mid_id = %d \n\n\n\n\n", *mid_id);
@@ -66,8 +68,6 @@ void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, i
         printf("\n 2) mid_id = %d, mid_elem = %d, end = %2d, start = %2d, now_elem = %d", *mid_id, *mid_elem, *end, *start, massiv[*end]);
         getchar();
         */
-        Print_h(ab_text, ab_str);
-        getchar();
 
         }
 
@@ -77,6 +77,10 @@ void deviser(struct About_text* ab_text, int* start, int* end, char* mid_elem, i
 
 void Qsort(struct About_text* ab_text, int start, int end, struct About_str* ab_str)
 {
+    assert(ab_text != NULL);
+    assert(ab_str != NULL);
+    assert(start >= 0);
+    assert(end <= ab_text ->rows);
 
     int rows = end - start + 1;
     char* mid_elem = ab_str[ start + rows/2].str;
@@ -85,7 +89,9 @@ void Qsort(struct About_text* ab_text, int start, int end, struct About_str* ab_
     int previous_start = start;
     int previous_end   = end;
 
-    deviser(ab_text, &start, &end, mid_elem, &previous_start, &previous_end, &mid_id, ab_str);
+    //Print_h(ab_text, ab_str);
+
+    deviser( &start, &end, mid_elem, &mid_id, ab_str);
 
     //Print_ans(massiv, 0, 13, start, end);
     //printf("\n --------------------------start = %d, end = %d \n", start, end);
